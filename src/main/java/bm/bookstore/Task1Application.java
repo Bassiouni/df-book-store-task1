@@ -19,7 +19,7 @@ public class Task1Application implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         System.out.println("Welcome to the Book Library");
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
@@ -35,12 +35,12 @@ public class Task1Application implements CommandLineRunner {
                     break;
 
                 switch (choice) {
-                    case 1:
+                    case 1 -> {
                         for (BookEntity b : this.bookService.getAllBooks()) {
                             System.out.println(b.toString());
                         }
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         System.out.print("""
                                 1. by title
                                 2. bt id
@@ -74,9 +74,14 @@ public class Task1Application implements CommandLineRunner {
                             System.out.println("Abort\nBad input");
                             System.exit(1);
                         }
-                        break;
-                    case 3:
-                        int id; String title; String author; String description; double price; int quantity;
+                    }
+                    case 3 -> {
+                        int id;
+                        String title;
+                        String author;
+                        String description;
+                        double price;
+                        int quantity;
                         System.out.print("id: ");
                         id = scanner.nextInt();
                         System.out.print("title: ");
@@ -89,9 +94,8 @@ public class Task1Application implements CommandLineRunner {
                         price = scanner.nextDouble();
                         System.out.print("quantity: ");
                         quantity = scanner.nextInt();
-
                         this.bookService.addBook(new BookEntity(id, title, author, description, price, quantity));
-                        break;
+                    }
                 }
             }
         }
