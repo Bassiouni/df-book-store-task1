@@ -1,6 +1,6 @@
 package bm.bookstore.controller;
 
-import bm.bookstore.entities.BookEntity;
+import bm.bookstore.dto.BookDTO;
 import bm.bookstore.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +19,15 @@ public class BookApi {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<BookEntity>> getAllBooks() {
-        List<BookEntity> bookEntities = this.bookService.getAllBooks();
+    public ResponseEntity<List<BookDTO>> getAllBooks() {
+        List<BookDTO> bookEntities = this.bookService.getAllBooks();
         return ResponseEntity.status(HttpStatus.OK).body(bookEntities);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookEntity> getBookByID(@PathVariable String id) {
+    public ResponseEntity<BookDTO> getBookByID(@PathVariable int id) {
         try {
-            BookEntity bookEntity = this.bookService.getBookByID(Integer.parseInt(id));
+            BookDTO bookEntity = this.bookService.getBookByID(id);
             return ResponseEntity.status(HttpStatus.OK).body(bookEntity);
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -35,22 +35,20 @@ public class BookApi {
     }
 
     @PostMapping("/")
-    public ResponseEntity<BookEntity> addBook(@RequestBody BookEntity bookEntity) {
-        this.bookService.addBook(bookEntity);
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookEntity);
+    public ResponseEntity<BookDTO> addBook(@RequestBody BookDTO bookEntity) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.bookService.addOrUpdateBook(bookEntity));
     }
 
     @PutMapping("/")
-    public ResponseEntity<BookEntity> updateBookByID(@RequestBody BookEntity bookEntity) {
-        this.bookService.updateBookByID(bookEntity);
-        return ResponseEntity.status(HttpStatus.OK).body(bookEntity);
+    public ResponseEntity<BookDTO> updateBookByID(@RequestBody BookDTO bookEntity) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.bookService.addOrUpdateBook(bookEntity));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBookByID(@PathVariable String id) {
-        int bid = Integer.parseInt(id);
+    public ResponseEntity<String> deleteBookByID(@PathVariable int id) {
 
-        if (this.bookService.removeBookByID(bid)) {
+        if (this.bookService.bookExistsById(id)) {
+            this.bookService.removeBookByID(id);
             return ResponseEntity.status(HttpStatus.OK).build();
         }
 
