@@ -3,11 +3,12 @@ package bm.bookstore.service;
 import bm.bookstore.dto.BookDTO;
 import bm.bookstore.dto.BookDTOMapper;
 import bm.bookstore.entities.BookEntity;
+import bm.bookstore.exceptions.BookNotFoundException;
 import bm.bookstore.repository.IBookRepoJPA;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,16 +26,11 @@ public class BookService {
         return bookEntities.stream().map(bookDTOMapper).collect(Collectors.toList());
     }
 
-    // public BookDTO searchBooksByTitle(String title) throws NoSuchElementException {
-    //     return BookDTO.from(this.bookRepo.findBookByTitle(title));
-    // }
-
-    // public BookDTO searchBookByAuthor(String author) throws NoSuchElementException {
-    //     return BookDTO.from(this.bookRepo.findBookByAuthor(author));
-    // }
-
-    public BookDTO getBookByID(Integer id) throws NoSuchElementException {
-        return BookDTO.from(this.bookRepo.findById(id).get());
+    public BookDTO getBookByID(Integer id) throws BookNotFoundException {
+        Optional<BookEntity> book = this.bookRepo.findById(id);
+        if (book.isEmpty())
+            throw new BookNotFoundException("Book not found");
+        return BookDTO.from(book.get());
     }
 
     public BookDTO addOrUpdateBook(BookDTO bookDTO) {

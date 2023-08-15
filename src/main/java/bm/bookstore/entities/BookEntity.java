@@ -2,9 +2,9 @@ package bm.bookstore.entities;
 
 import bm.bookstore.dto.BookDTO;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 
+@Getter
 @Entity(name = "books")
 @Table(name = "books")
 public class BookEntity {
@@ -12,19 +12,19 @@ public class BookEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
-	@Column(name = "name", length = 50, nullable = false, unique = false)
+	@Column(name = "name", length = 50, nullable = false)
 	private String title;
 
-	@Column(name = "author", length = 50, nullable = false, unique = false)
+	@Column(name = "author", length = 50, nullable = false)
 	private String author;
 
-	@Column(name = "description", length = 50, nullable = false, unique = false)
+	@Column(name = "description", length = 50, nullable = false)
 	private String description;
 
-	@Column(name = "price", length = 50, nullable = false, unique = false)
+	@Column(name = "price", length = 50, nullable = false)
 	private double price;
 
-	@Column(name = "quantity", length = 50, nullable = false, unique = false)
+	@Column(name = "quantity", length = 50, nullable = false)
 	private int quantity;
 
 	public BookEntity() {
@@ -64,51 +64,8 @@ public class BookEntity {
 				bookDTO.quantity());
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
 	public void setId(int id) {
 		this.id = id;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
 }

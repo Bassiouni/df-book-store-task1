@@ -6,24 +6,31 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public record BookDTO(
-        @NotNull
+        @NotNull(message = "Please specify the ID")
         int id,
 
-        @NotNull
+        @NotNull(message = "Title shouldn't be empty")
         @Min(1)
-        @Max(120)
+        @Max(50)
         String title,
 
-        @NotNull
+        @NotNull(message = "Author name shouldn't be empty")
+        @Max(50)
         String author,
 
-        @NotNull
+        @NotNull(message = "Description shouldn't be empty")
+        @Min(0)
+        @Max(50)
         String description,
 
-        @NotNull
+        @NotNull(message = "Price shouldn't be empty")
+        @Min(0)
+        @Max(50)
         double price,
 
-        @NotNull
+        @NotNull(message = "Price shouldn't be empty")
+        @Min(0)
+        @Max(50)
         int quantity
 ) {
     public static BookDTO from(BookEntity bookEntity) {
