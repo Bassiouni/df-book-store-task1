@@ -6,12 +6,14 @@ import bm.bookstore.repository.UserRepository;
 
 import java.util.Optional;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Log4j2
 public class AuthService {
 	private final UserRepository userRepository;
 
@@ -50,6 +52,7 @@ public class AuthService {
 
 		Optional<UserEntity> user = userRepository.findByUsername(request.getUsername());
 		if (user.isEmpty()) {
+			log.info("authenticating a non-existing user; falling back to empty token");
 			return AuthResponse
 					.builder().build();
 		}

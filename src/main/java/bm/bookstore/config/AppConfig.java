@@ -1,7 +1,7 @@
 package bm.bookstore.config;
 
-import bm.bookstore.entities.UserEntity;
 import bm.bookstore.exceptions.UserNotFoundException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import bm.bookstore.repository.UserRepository;
 
 @Configuration
+@Log4j2
 public class AppConfig {
     private final ConfigurableApplicationContext applicationContext;
     private final UserRepository userRepository;
@@ -48,7 +49,10 @@ public class AppConfig {
     @Bean
     public UserDetailsService userDetailsService() {
 
-        return username -> userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found with username=" + username));
+        return username -> userRepository.findByUsername(username).orElseThrow(() ->{
+            log.error("Throwing user not found exception with username=" + username);
+            return new UserNotFoundException("User not found with username=" + username);
+        });
         // .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }

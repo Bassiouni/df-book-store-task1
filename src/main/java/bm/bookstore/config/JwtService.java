@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 
 @Service
+@Log4j2
 public class JwtService {
     private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
 
@@ -29,6 +31,7 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        log.info("Generating JWT token");
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
@@ -40,6 +43,7 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
+        log.info("Validating JWT token");
         final String username = extractUsername(token);
         return Objects.equals(username, userDetails.getUsername()) && !isTokenExpired(token);
     }
